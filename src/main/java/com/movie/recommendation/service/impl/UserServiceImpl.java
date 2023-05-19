@@ -40,10 +40,8 @@ public class UserServiceImpl implements UserService {
         if (user1 != null) {
             throw new Exception("User already exist with the given useremail:" + userDto.getUserEmail());
         } else {
-           Optional<Role> role =roleRepository.findById(userDto.getUserId());
-
-
-                if (role.isEmpty()) {
+           Optional<Role> role =roleRepository.findById(userDto.getRoleId());
+           if (role.isEmpty()) {
                     throw new Exception("User does not provide valid role for registration!!!");
                 } else {
                     User resultUser=new User();

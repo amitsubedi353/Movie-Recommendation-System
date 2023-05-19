@@ -2,17 +2,28 @@ package com.movie.recommendation.controller;
 
 import com.movie.recommendation.dto.UserDto;
 import com.movie.recommendation.helper.ApiResponse;
+import com.movie.recommendation.helper.JwtHelper;
 import com.movie.recommendation.model.Role;
 import com.movie.recommendation.model.User;
 import com.movie.recommendation.repo.RoleRepository;
+import com.movie.recommendation.repo.UserRepository;
+import com.movie.recommendation.security.CustomUserDetail;
+import com.movie.recommendation.security.CustomUserDetailService;
 import com.movie.recommendation.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 
@@ -23,14 +34,19 @@ public class UserController {
     private UserService userService;
     @Autowired
     private RoleRepository roleRepository;
+    @Autowired
+    private AuthenticationManager authenticationManager;
+    @Autowired
+    private CustomUserDetailService customUserDetailService;
+    @Autowired
+    private JwtHelper jwtHelper;
+    @Autowired
+    private UserRepository userRepository;
 
 
     @PostMapping("/create")
     ResponseEntity<UserDto> createUser(@RequestBody UserDto user) throws Exception {
-
-
-
-            //user.setRoleList(roleList);
+        //user.setRoleList(roleList);
              UserDto userDto = this.userService.createUser(user);
 
         return new ResponseEntity<>(userDto, HttpStatusCode.valueOf(200));
@@ -56,4 +72,30 @@ public class UserController {
         }
         return new ResponseEntity<>(new ApiResponse("Something went wrong"),HttpStatusCode.valueOf(500));
     }
+    @PostMapping("/login")
+    public ResponseEntity<ApiResponse> login(@RequestBody UserDto userDto) throws Exception {
+        String userName = userDto.getUserEmail();
+        String password = userDto.getUserPassword();
+        UserDetails userDetails = customUserDetailService.loadUserByUsername(userName);
+        authenticate(userName, password, userDetails.getAuthorities());
+        User retrievedUser=userRepository.findByUserEmail(userName);
+        String jwtToken = this.jwtHelper.generateToken(new CustomUserDetail(retrievedUser));
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + jwtToken);
+        ApiResponse apiResponse = new ApiResponse("Token generated successfully");
+        return ResponseEntity.ok().headers(headers).body(apiResponse);
+
+    }
+
+    private void authenticate(String userName, String password, Collection<? extends GrantedAuthority> authorities)
+            throws Exception {
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+                userName, password, authorities);
+        try {
+            this.authenticationManager.authenticate(usernamePasswordAuthenticationToken);
+        } catch (DisabledException e) {
+            throw new Exception("user is disabled!!!");
+        }
+    }
+
 }

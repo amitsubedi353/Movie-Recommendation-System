@@ -1,15 +1,13 @@
 package com.movie.recommendation.security;
 
 import com.movie.recommendation.model.Authority;
+import com.movie.recommendation.model.Role;
 import com.movie.recommendation.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class CustomUserDetail implements UserDetails {
     @Autowired
@@ -21,9 +19,11 @@ public class CustomUserDetail implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<Authority> set=new HashSet<>();
-        List<userRole> userRoles =this.user.getUserRoles();
-        userRoles.forEach(userRole -> {
-            set.add(new Authority(userRole.getRole().getRoleName()));
+        Role userRole =this.user.getRole();
+        List<Role> roles=new ArrayList<>();
+        roles.add(userRole);
+        roles.forEach(eachRole -> {
+            set.add(new Authority(eachRole.getRoleName()));
         });
         return set;
     }
