@@ -77,7 +77,11 @@ public class MovieServiceImpl implements MovieService {
     public List<MovieDto> getAllMovieByGenre(Long genreId) {
 
        Genre retrievedGenre=queryClass.getgenreById(genreId);
+<<<<<<< HEAD
        List<Movie> movies=movieRepository.findByGenre(retrievedGenre);
+=======
+       List<Movie> movies=movieRepository.findByMovieGenre(retrievedGenre);
+>>>>>>> 68fde714264c1e4a850f8e1ce5f029e0346a5121
        if(movies.isEmpty()){
            return null;
        }

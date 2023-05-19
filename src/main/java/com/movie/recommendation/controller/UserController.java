@@ -2,6 +2,7 @@ package com.movie.recommendation.controller;
 
 import com.movie.recommendation.dto.UserDto;
 import com.movie.recommendation.helper.ApiResponse;
+<<<<<<< HEAD
 import com.movie.recommendation.helper.JwtHelper;
 import com.movie.recommendation.model.Role;
 import com.movie.recommendation.model.User;
@@ -19,11 +20,23 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+=======
+import com.movie.recommendation.model.Role;
+import com.movie.recommendation.model.User;
+import com.movie.recommendation.repo.RoleRepository;
+import com.movie.recommendation.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
+>>>>>>> 68fde714264c1e4a850f8e1ce5f029e0346a5121
 import org.springframework.web.bind.annotation.*;
 
 
 import java.util.ArrayList;
+<<<<<<< HEAD
 import java.util.Collection;
+=======
+>>>>>>> 68fde714264c1e4a850f8e1ce5f029e0346a5121
 import java.util.List;
 
 
@@ -34,6 +47,7 @@ public class UserController {
     private UserService userService;
     @Autowired
     private RoleRepository roleRepository;
+<<<<<<< HEAD
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
@@ -42,11 +56,20 @@ public class UserController {
     private JwtHelper jwtHelper;
     @Autowired
     private UserRepository userRepository;
+=======
+>>>>>>> 68fde714264c1e4a850f8e1ce5f029e0346a5121
 
 
     @PostMapping("/create")
     ResponseEntity<UserDto> createUser(@RequestBody UserDto user) throws Exception {
+<<<<<<< HEAD
         //user.setRoleList(roleList);
+=======
+
+
+
+            //user.setRoleList(roleList);
+>>>>>>> 68fde714264c1e4a850f8e1ce5f029e0346a5121
              UserDto userDto = this.userService.createUser(user);
 
         return new ResponseEntity<>(userDto, HttpStatusCode.valueOf(200));
@@ -72,6 +95,7 @@ public class UserController {
         }
         return new ResponseEntity<>(new ApiResponse("Something went wrong"),HttpStatusCode.valueOf(500));
     }
+<<<<<<< HEAD
     @PostMapping("/login")
     public ResponseEntity<ApiResponse> login(@RequestBody UserDto userDto) throws Exception {
         String userName = userDto.getUserEmail();
@@ -98,4 +122,6 @@ public class UserController {
         }
     }
 
+=======
+>>>>>>> 68fde714264c1e4a850f8e1ce5f029e0346a5121
 }

@@ -25,7 +25,10 @@ public class RatingServiceImpl implements RatingService {
     private RatingRepo ratingRepo;
     @Autowired
     private UserRepository userRepository;
+<<<<<<< HEAD
     @Autowired
+=======
+>>>>>>> 68fde714264c1e4a850f8e1ce5f029e0346a5121
     private MovieRepository movieRepository;
 
     @Override

@@ -9,7 +9,10 @@ import com.movie.recommendation.service.GenreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+<<<<<<< HEAD
 import org.springframework.security.access.prepost.PreAuthorize;
+=======
+>>>>>>> 68fde714264c1e4a850f8e1ce5f029e0346a5121
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -24,7 +27,10 @@ public class GenreController {
 
 
     @PostMapping("/create")
+<<<<<<< HEAD
     @PreAuthorize("hasAuthority('')")
+=======
+>>>>>>> 68fde714264c1e4a850f8e1ce5f029e0346a5121
     ResponseEntity<?> createGenreController(@RequestBody GenreDto genreDto, Principal principal) throws Exception {
         GenreDto retrievedGenreDto=this.genreService.createGenre(genreDto,principal);
         if(retrievedGenreDto!=null) {
