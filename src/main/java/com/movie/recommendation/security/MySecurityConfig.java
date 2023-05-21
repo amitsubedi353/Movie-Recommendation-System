@@ -39,11 +39,10 @@ public class MySecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf().disable()
                 .authorizeHttpRequests()
-<<<<<<< HEAD
+
                 .requestMatchers("/api/auth/generate-token","/user/create","/user/login").permitAll()
-=======
+
                 .requestMatchers("/api/auth/generate-token","/user/create").permitAll()
->>>>>>> 68fde714264c1e4a850f8e1ce5f029e0346a5121
                 .anyRequest()
                 .authenticated().and()
                 .exceptionHandling()

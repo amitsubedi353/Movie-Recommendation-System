@@ -40,28 +40,27 @@ public class UserServiceImpl implements UserService {
         if (user1 != null) {
             throw new Exception("User already exist with the given useremail:" + userDto.getUserEmail());
         } else {
-<<<<<<< HEAD
-           Optional<Role> role =roleRepository.findById(userDto.getRoleId());
-           if (role.isEmpty()) {
-=======
-           Optional<Role> role =roleRepository.findById(userDto.getUserId());
 
 
-                if (role.isEmpty()) {
->>>>>>> 68fde714264c1e4a850f8e1ce5f029e0346a5121
-                    throw new Exception("User does not provide valid role for registration!!!");
-                } else {
-                    User resultUser=new User();
-                    resultUser.setUserEmail(userDto.getUserEmail().toLowerCase());
-                    resultUser.setUserPassword(bCryptPasswordEncoder.encode(userDto.getUserPassword()));
-                    resultUser.setUserName(userDto.getUserName().toLowerCase());
-                    resultUser.setRole(role.get());
-                    resultUser = this.userRepository.save(resultUser);
-                    userDto.setUserId(resultUser.getUserId());
-                    return userDto;
-                }
+
+            Optional<Role> role =roleRepository.findById(userDto.getUserId());
+
+
+            if (role.isEmpty()) {
+
+                throw new Exception("User does not provide valid role for registration!!!");
+            } else {
+                User resultUser=new User();
+                resultUser.setUserEmail(userDto.getUserEmail().toLowerCase());
+                resultUser.setUserPassword(bCryptPasswordEncoder.encode(userDto.getUserPassword()));
+                resultUser.setUserName(userDto.getUserName().toLowerCase());
+                resultUser.setRole(role.get());
+                resultUser = this.userRepository.save(resultUser);
+                userDto.setUserId(resultUser.getUserId());
+                return userDto;
             }
-            }
+        }
+    }
 
     @Override
     public UserDto getUserByEmail(String email) {
@@ -103,8 +102,8 @@ public class UserServiceImpl implements UserService {
         }
         retrievedUser=this.userRepository.save(retrievedUser);
         if(retrievedUser!=null){
-             message= "user updated successfully";
-             return message;
+            message= "user updated successfully";
+            return message;
         }
 
         return message;

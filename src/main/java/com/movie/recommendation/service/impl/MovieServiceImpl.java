@@ -76,19 +76,17 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public List<MovieDto> getAllMovieByGenre(Long genreId) {
 
-       Genre retrievedGenre=queryClass.getgenreById(genreId);
-<<<<<<< HEAD
-       List<Movie> movies=movieRepository.findByGenre(retrievedGenre);
-=======
-       List<Movie> movies=movieRepository.findByMovieGenre(retrievedGenre);
->>>>>>> 68fde714264c1e4a850f8e1ce5f029e0346a5121
-       if(movies.isEmpty()){
-           return null;
-       }
-       List<MovieDto> movieDtos=new ArrayList<>();
+        Genre retrievedGenre=queryClass.getgenreById(genreId);
+
+        List<Movie> movies=movieRepository.findByGenre(retrievedGenre);
+
+        if(movies.isEmpty()){
+            return null;
+        }
+        List<MovieDto> movieDtos=new ArrayList<>();
 
         for (Movie eachMovie:movies
-             ) {
+        ) {
             MovieDto movieDto=this.modelMapper.map(eachMovie,MovieDto.class);
             movieDto.setGenreId(eachMovie.getGenre().getGenreId());
             movieDto.setUserId(eachMovie.getUser().getUserId());
@@ -143,6 +141,6 @@ public class MovieServiceImpl implements MovieService {
             return null;
         }
         return message;
-        }
+    }
 
 }

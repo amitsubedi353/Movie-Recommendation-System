@@ -3,16 +3,14 @@ package com.movie.recommendation.controller;
 
 import com.movie.recommendation.dto.GenreDto;
 import com.movie.recommendation.helper.ApiResponse;
-import com.movie.recommendation.model.Genre;
-import com.movie.recommendation.model.Role;
+
 import com.movie.recommendation.service.GenreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-<<<<<<< HEAD
+
 import org.springframework.security.access.prepost.PreAuthorize;
-=======
->>>>>>> 68fde714264c1e4a850f8e1ce5f029e0346a5121
+
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -27,10 +25,9 @@ public class GenreController {
 
 
     @PostMapping("/create")
-<<<<<<< HEAD
+
     @PreAuthorize("hasAuthority('')")
-=======
->>>>>>> 68fde714264c1e4a850f8e1ce5f029e0346a5121
+
     ResponseEntity<?> createGenreController(@RequestBody GenreDto genreDto, Principal principal) throws Exception {
         GenreDto retrievedGenreDto=this.genreService.createGenre(genreDto,principal);
         if(retrievedGenreDto!=null) {
@@ -78,9 +75,9 @@ public class GenreController {
     @GetMapping("/read")
     ResponseEntity<?> getGenreByNameController(@RequestParam("genreName")String genreName) throws Exception {
         GenreDto resultGenre =this.genreService.getGenreByName(genreName);
-       if(resultGenre==null){
-           return new ResponseEntity<>(new ApiResponse("there is no genre with the given genre name"),HttpStatusCode.valueOf(200));
-       }
-       return new ResponseEntity<>(resultGenre,HttpStatusCode.valueOf(200));
+        if(resultGenre==null){
+            return new ResponseEntity<>(new ApiResponse("there is no genre with the given genre name"),HttpStatusCode.valueOf(200));
+        }
+        return new ResponseEntity<>(resultGenre,HttpStatusCode.valueOf(200));
     }
 }
