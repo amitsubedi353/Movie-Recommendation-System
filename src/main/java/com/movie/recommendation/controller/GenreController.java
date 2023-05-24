@@ -25,9 +25,7 @@ public class GenreController {
 
 
     @PostMapping("/create")
-
-    @PreAuthorize("hasAuthority('')")
-
+    @PreAuthorize("hasAuthority('manage_genre')")
     ResponseEntity<?> createGenreController(@RequestBody GenreDto genreDto, Principal principal) throws Exception {
         GenreDto retrievedGenreDto=this.genreService.createGenre(genreDto,principal);
         if(retrievedGenreDto!=null) {
@@ -40,6 +38,7 @@ public class GenreController {
 
 
     @GetMapping("read/{userId}")
+    @PreAuthorize("hasAuthority('view_genre')")
     ResponseEntity<?> getGenreByUserController(@PathVariable Long userId){
 
 
@@ -54,6 +53,7 @@ public class GenreController {
 
 
     @DeleteMapping("/delete/{genreId}")
+    @PreAuthorize("hasAuthority('manage_genre')")
     ResponseEntity<ApiResponse> deleteGenreController(@PathVariable Long genreId,Principal principal) throws Exception {
         String message=this.genreService.deleteGenre(genreId,principal);
         if(message.isEmpty()){
@@ -65,6 +65,7 @@ public class GenreController {
 
 
     @PutMapping("/update")
+    @PreAuthorize("hasAuthority('manage_genre')")
     ResponseEntity<?> updateGenreController(@RequestBody GenreDto genreDto) throws Exception {
         String message=this.genreService.updateGenre(genreDto);
         if(message.isEmpty()){
@@ -73,6 +74,7 @@ public class GenreController {
         return new ResponseEntity<>(new ApiResponse(message),HttpStatusCode.valueOf(200));
     }
     @GetMapping("/read")
+    @PreAuthorize("hasAuthority('view_genre')")
     ResponseEntity<?> getGenreByNameController(@RequestParam("genreName")String genreName) throws Exception {
         GenreDto resultGenre =this.genreService.getGenreByName(genreName);
         if(resultGenre==null){

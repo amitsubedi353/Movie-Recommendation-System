@@ -8,6 +8,7 @@ import com.movie.recommendation.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -20,6 +21,7 @@ public class MovieController {
     private MovieService movieService;
 
     @PostMapping("/create")
+    @PreAuthorize("hasAuthority('manage_movie')")
     ResponseEntity<?> createMovieController(@RequestBody MovieDto movieDto,Principal principal) throws Exception {
         MovieDto movieDto1=movieService.createMovie(movieDto,principal);
         if(movieDto1==null){
@@ -30,6 +32,7 @@ public class MovieController {
     }
 
     @DeleteMapping("/delete/{movieId}")
+    @PreAuthorize("hasAuthority('manage_movie')")
     ResponseEntity<ApiResponse> deleteMovieController(@PathVariable("movieId")Long movieId, Principal principal){
         String message=this.movieService.deleteMovie(movieId,principal);
         if(message.isEmpty()){
@@ -41,6 +44,7 @@ public class MovieController {
 
 
 @GetMapping("read/{genreId}")
+@PreAuthorize("hasAuthority('view_movie')")
     ResponseEntity<?> readMovieByGenreController(@PathVariable("genreId")Long genreId){
         List<MovieDto> movies=this.movieService.getAllMovieByGenre(genreId);
         if(movies.isEmpty()){
@@ -51,6 +55,7 @@ public class MovieController {
     }
 
     @GetMapping("/read/{userId}")
+    @PreAuthorize("hasAuthority('view_movie')")
     ResponseEntity<?> readMovieByUserController(@PathVariable("userId")Long userId){
         List<MovieDto> movies=this.movieService.getAllMovieByUser(userId);
         if(movies.isEmpty()){
@@ -60,6 +65,7 @@ public class MovieController {
 
     }
     @PutMapping("/update")
+    @PreAuthorize("hasAuthority('manage_movie')")
     ResponseEntity<?> updateMovieController(@RequestBody MovieDto movieDto,Principal principal) throws Exception {
         String message=this.movieService.updateMovie(movieDto,principal);
         if(message.isEmpty()){

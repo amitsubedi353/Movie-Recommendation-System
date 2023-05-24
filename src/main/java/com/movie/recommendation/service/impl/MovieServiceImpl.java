@@ -96,9 +96,9 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public List<MovieDto> getAllMovieByUser(Long userId) {
-        User retrievedUser=queryClass.getUserById(userId);
-        List<Movie> movies=movieRepository.findByUser(retrievedUser);
+    public List<MovieDto> getAllMovie() {
+
+        List<Movie> movies=movieRepository.findAll();
         if(movies.isEmpty()){
             return null;
         }

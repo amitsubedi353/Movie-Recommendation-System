@@ -5,6 +5,7 @@ import com.movie.recommendation.model.Role;
 import com.movie.recommendation.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 
@@ -25,15 +26,15 @@ public class CustomUserDetail implements UserDetails {
     }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Set<Authority> set=new HashSet<>();
-
+        List<GrantedAuthority> grantedAuthorities=new ArrayList<>();
         Role userRole =this.user.getRole();
-        List<Role> roles=new ArrayList<>();
-        roles.add(userRole);
+        List<Authority> authorityList=userRole.getAuthorities();
+        for (Authority eachAuthority:authorityList
+             ) {
+           grantedAuthorities.add(new SimpleGrantedAuthority(eachAuthority.getAuthority()));
 
-
-
-        return set;
+        }
+        return grantedAuthorities;
     }
 
     @Override

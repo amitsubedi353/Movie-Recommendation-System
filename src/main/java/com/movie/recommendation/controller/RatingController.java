@@ -7,6 +7,7 @@ import com.movie.recommendation.service.RatingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -18,6 +19,7 @@ public class RatingController {
     @Autowired
     private RatingService ratingService;
     @PostMapping("/create")
+    @PreAuthorize("hasAuthority('create_rating')")
     ResponseEntity<?> createRatingController(@RequestBody RatingDto ratingDto, Principal principal) throws Exception {
         RatingDto rating1=ratingService.createRating(ratingDto,principal);
         if(rating1.equals(null)){
@@ -26,7 +28,8 @@ public class RatingController {
         return new ResponseEntity<>(rating1,HttpStatusCode.valueOf(200));
     }
 @GetMapping("/read/{movieId}")
- ResponseEntity<?> getRatingByMovie(@PathVariable Long movieId){
+@PreAuthorize("hasAuthority('view_rating')")
+ ResponseEntity<?> getAverageRatingByMovie(@PathVariable Long movieId){
         List<Rating> ratings=ratingService.getRatingByMovie(movieId);
         if(ratings.isEmpty()){
             return new ResponseEntity<>(new ApiResponse("there is no rating for the given movie!!!"),HttpStatusCode.valueOf(200));

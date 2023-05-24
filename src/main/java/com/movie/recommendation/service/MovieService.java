@@ -13,7 +13,7 @@ public interface MovieService {
 
     List<MovieDto> getAllMovieByGenre(Long genreId);
 
-    List<MovieDto> getAllMovieByUser(Long userId);
+    List<MovieDto> getAllMovie();
 
     String  updateMovie(MovieDto movieDto,Principal principal) throws Exception;
 

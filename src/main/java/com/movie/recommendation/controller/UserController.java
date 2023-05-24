@@ -4,6 +4,7 @@ import com.movie.recommendation.dto.UserDto;
 import com.movie.recommendation.helper.ApiResponse;
 
 import com.movie.recommendation.helper.JwtHelper;
+import com.movie.recommendation.helper.JwtRequest;
 import com.movie.recommendation.model.Role;
 import com.movie.recommendation.model.User;
 import com.movie.recommendation.repo.RoleRepository;
@@ -89,9 +90,9 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse> login(@RequestBody UserDto userDto) throws Exception {
-        String userName = userDto.getUserEmail();
-        String password = userDto.getUserPassword();
+    public ResponseEntity<ApiResponse> login(@RequestBody JwtRequest jwtRequest) throws Exception {
+        String userName = jwtRequest.getUsername();
+        String password =jwtRequest.getPassword();
         UserDetails userDetails = customUserDetailService.loadUserByUsername(userName);
         authenticate(userName, password, userDetails.getAuthorities());
         User retrievedUser=userRepository.findByUserEmail(userName);

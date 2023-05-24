@@ -24,6 +24,9 @@ public class Movie {
 
     @Column(name = "movie_title",unique = true)
     private String movieTitle;
+    @Column()
+    private String movieDescription;
+
 
     @Column(name="release_date")
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -43,10 +46,6 @@ public class Movie {
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "movie")
     @JsonManagedReference(value = "movie_table")
     private List<Rating> ratings;
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-    @JoinColumn(name="watchlist_id_fk",referencedColumnName = "watchlist_id")
-    @JsonBackReference(value = "watchlist_table")
-    private WatchList watchlist;
 
 
 
