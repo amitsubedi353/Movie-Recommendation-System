@@ -15,10 +15,10 @@ public class WatchList {
     @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinColumn(name="user_id_fk",referencedColumnName = "user_id")
     private User user;
-
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "watchlist")
-    @JsonManagedReference(value = "watchlist_table")
-    private List<Movie> movies;
+    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @JoinColumn(name = "movie_id_fk",referencedColumnName = "movie_id")
+    @JsonManagedReference(value ="movie_table")
+    private Movie movie;
 
 
 

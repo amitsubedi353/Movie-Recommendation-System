@@ -1,7 +1,9 @@
 package com.movie.recommendation.service.impl;
 
 import com.movie.recommendation.constant.AppConstant;
+import com.movie.recommendation.dto.MovieDto;
 import com.movie.recommendation.dto.RatingDto;
+import com.movie.recommendation.helper.AverageRatingService;
 import com.movie.recommendation.helper.QueryClass;
 import com.movie.recommendation.model.*;
 import com.movie.recommendation.repo.MovieRepository;
@@ -13,9 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class RatingServiceImpl implements RatingService {
@@ -27,49 +27,42 @@ public class RatingServiceImpl implements RatingService {
     private UserRepository userRepository;
 
     @Autowired
-
     private MovieRepository movieRepository;
 
     @Override
-    public RatingDto createRating(RatingDto ratingDto, Principal principal){
-        User loggedInUser=userRepository.findByUserEmail(principal.getName());
-        Movie retrievedMovie=queryClass.getMovieById(ratingDto.getMovieId());
-        if(loggedInUser.getUserId().equals(ratingDto.getUserId())){
-            Rating retrievedRating=ratingRepo.findByUserAndMovie(loggedInUser,retrievedMovie);
-            if(retrievedRating==null){
-                if(ratingDto.getRatingNumber()<= AppConstant.maxRating){
-                    Rating rating=new Rating();
+    public Map<Integer,String> createRating(RatingDto ratingDto, Principal principal) {
+        Map<Integer, String> message = new HashMap<>();
+
+        User loggedInUser = userRepository.findByUserEmail(principal.getName());
+        Movie retrievedMovie = queryClass.getMovieById(ratingDto.getMovieId());
+        if (loggedInUser.getUserId().equals(ratingDto.getUserId())) {
+            Rating retrievedRating = ratingRepo.getRatingByUserAndMovie(loggedInUser.getUserId(), retrievedMovie.getMovieId());
+            if (retrievedRating == null) {
+                if (ratingDto.getRatingNumber() <= AppConstant.maxRating) {
+                    Rating rating = new Rating();
                     rating.setMovie(retrievedMovie);
                     rating.setUser(loggedInUser);
                     rating.setRatingNumber(ratingDto.getRatingNumber());
-                    rating=ratingRepo.save(rating);
-                    ratingDto.setRatingId(rating.getRatingId());
-                    return ratingDto;
-
+                    rating = ratingRepo.save(rating);
+                    message.put(200, "Rating created successfully!!!");
+                    return message;
+                } else {
+                    message.put(500, "please select a appropriate rating number");
+                    return message;
                 }
-
-            }else
-            {
-                return null;
+            } else {
+                message.put(500, "user has already created the rating for the given movie");
+                return message;
             }
-
-        }else {
-            return null;
         }
-        return null;
+            return message;
+
     }
 
     @Override
     public List<Rating> getRatingByMovie(Long movieId) {
-        Movie retrievedMovie=queryClass.getMovieById(movieId);
-        return ratingRepo.findByMovie(retrievedMovie);
-
-    }
-
-    @Override
-    public Float calculateAverageRatingForMovie(Long movieId) {
-        Movie retrievedMovie=queryClass.getMovieById(movieId);
         return null;
     }
+
 
 }

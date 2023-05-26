@@ -32,6 +32,8 @@ public class MySecurityConfig {
     private CustomUserDetailService  customUserDetailService;
     @Autowired
     private JwtAuthenticationEntryPoint  jwtAuthenticationEntryPoint;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     //authentication
 
 
@@ -40,9 +42,7 @@ public class MySecurityConfig {
         return http.csrf().disable()
                 .authorizeHttpRequests()
 
-                .requestMatchers("/api/auth/generate-token","/user/create","/user/login").permitAll()
-
-                .requestMatchers("/api/auth/generate-token","/user/create").permitAll()
+                .requestMatchers("/user/create","/user/login").permitAll()
                 .anyRequest()
                 .authenticated().and()
                 .exceptionHandling()
@@ -56,16 +56,13 @@ public class MySecurityConfig {
                 .build();
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+
 
     @Bean
     public AuthenticationProvider authenticationProvider(){
         DaoAuthenticationProvider authenticationProvider=new DaoAuthenticationProvider();
         authenticationProvider.setUserDetailsService(this.customUserDetailService);
-        authenticationProvider.setPasswordEncoder(passwordEncoder());
+        authenticationProvider.setPasswordEncoder(passwordEncoder);
         return authenticationProvider;
     }
     @Bean

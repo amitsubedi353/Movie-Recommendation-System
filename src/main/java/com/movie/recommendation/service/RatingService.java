@@ -6,12 +6,13 @@ import com.movie.recommendation.model.Rating;
 import java.awt.datatransfer.FlavorEvent;
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 
 public interface RatingService {
-    RatingDto createRating(RatingDto ratingDto, Principal principal) throws Exception;
+    Map<Integer,String> createRating(RatingDto ratingDto, Principal principal) throws Exception;
     List<Rating> getRatingByMovie(Long movieId);
 
-    Float calculateAverageRatingForMovie(Long movieId);
+
 
 
 }

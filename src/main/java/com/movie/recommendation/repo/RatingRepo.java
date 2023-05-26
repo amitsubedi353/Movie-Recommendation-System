@@ -5,18 +5,18 @@ import com.movie.recommendation.model.Rating;
 import com.movie.recommendation.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
-
+@Repository
 public interface RatingRepo extends JpaRepository<Rating,Long> {
     List<Rating> findByMovie(Movie movie);
-    @Query("select r from Rating r where r.user=?1 and r.movie=?2")
-    Rating findByUserAndMovie(User user,Movie movie);
-    //@Query(value = "select avg(rt.rating_number) from Rating rt inner join rt.Movie m  on  m.movie_id=rt. group by m.movieId where m.movieId=?1",nativeQuery = true)
 
-    @Query(value = "select avg(rating_number) from rating rt inner join rt.movie m  on rt.movie=m.movieId group by m.movieId where m.movieId=?1",nativeQuery = true)
-
+    @Query(value = "select avg(rt.ratingNumber) from Rating rt inner join Movie m  on rt.movie.movieId=m.movieId inner join User u on u.userId=rt.movie.movieId group by rt.movieId where rt.movie.movieId=?1",nativeQuery = true)
     Float calculateAverageRatingForMovie(Long movieId);
+
+    @Query(value = "select r.id from Rating r inner join User u on u.userId=r.user.userId inner join Movie m on m.movieId=r.movie.movieId where r.user.userId=?1 and r.movie.movieId=?2",nativeQuery = true)
+    Rating getRatingByUserAndMovie(Long userId,Long movieId);
 
 
 

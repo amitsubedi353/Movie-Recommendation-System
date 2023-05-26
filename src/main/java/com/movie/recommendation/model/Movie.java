@@ -24,15 +24,14 @@ public class Movie {
 
     @Column(name = "movie_title",unique = true)
     private String movieTitle;
-    @Column()
+    @Column(name = "movie_description")
     private String movieDescription;
-
-
+    @Column(name = "movie_image")
+    private String image;
+    private String fullPath;
     @Column(name="release_date")
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date releaseDate;
-    @Column(name="avg_rating")
-    private float avgRating;
     @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinColumn(name="genre_id_fk",referencedColumnName = "genre_id")
     @JsonBackReference(value = "genre_table")
@@ -47,9 +46,8 @@ public class Movie {
     @JsonManagedReference(value = "movie_table")
     private List<Rating> ratings;
 
-
-
-
-
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "movie")
+    @JsonManagedReference(value = "movie_table")
+    private List<WatchList> watchLists;
 
 }

@@ -3,7 +3,6 @@ package com.movie.recommendation.Exception;
 import lombok.Data;
 
 @Data
-
 public class ResourcenotFoundException extends RuntimeException {
     private String resourceName;
     private String resourceFieldName;

@@ -13,6 +13,7 @@ import java.util.Date;
 public class MovieDto {
     private Long movieId;
     private String movieTitle;
+    private String movieDescription;
     private Date releaseDate;
     private float avgRating;
     private Long genreId;

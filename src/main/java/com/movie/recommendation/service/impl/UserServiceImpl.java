@@ -11,11 +11,9 @@ import com.movie.recommendation.service.UserService;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 
@@ -29,7 +27,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private QueryClass queryClass;
     @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private PasswordEncoder  bCryptPasswordEncoder;
 
 
 
@@ -41,11 +39,7 @@ public class UserServiceImpl implements UserService {
             throw new Exception("User already exist with the given useremail:" + userDto.getUserEmail());
         } else {
 
-
-
             Optional<Role> role =roleRepository.findById(userDto.getUserId());
-
-
             if (role.isEmpty()) {
 
                 throw new Exception("User does not provide valid role for registration!!!");

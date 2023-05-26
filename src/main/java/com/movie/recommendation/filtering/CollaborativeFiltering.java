@@ -102,6 +102,10 @@ public class CollaborativeFiltering {
                         //apply recommendation logic (e.g threshold similarity score,minimum rating threshold)
                         if(similarityScore>0.5 && rating>=4){
 
+
+
+
+
                         }
 
                     }
