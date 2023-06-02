@@ -29,7 +29,7 @@ public class User implements Serializable {
     @Column(name="user_password")
     private String userPassword;
 
-@ManyToOne(cascade =CascadeType.ALL,fetch = FetchType.LAZY)
+@ManyToOne(cascade =CascadeType.ALL,fetch = FetchType.EAGER)
 @JoinColumn(name = "role_id_fk",referencedColumnName = "role_id")
 @JsonBackReference(value = "role_table")
 private Role role;

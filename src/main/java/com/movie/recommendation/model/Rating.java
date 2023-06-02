@@ -5,11 +5,12 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 @Data
 @Entity
 @Table(name = "rating_table")
-public class Rating{
+public class Rating implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "rating_id")
@@ -27,7 +28,7 @@ public class Rating{
 
     @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinColumn(name="movie_id_fk",referencedColumnName = "movie_id")
-    @JsonBackReference(value = "movie_table")
+    @JsonBackReference(value ="movie_table")
     private Movie movie;
 
 

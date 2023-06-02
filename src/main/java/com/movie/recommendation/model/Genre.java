@@ -4,12 +4,14 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
+
+import java.io.Serializable;
 import java.util.List;
 
 @Data
 @Entity
 @Table(name = "genre_table")
-public class Genre {
+public class Genre implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="genre_id")

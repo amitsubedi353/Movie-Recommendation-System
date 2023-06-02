@@ -1,14 +1,8 @@
 package com.movie.recommendation.helper;
 
 import com.movie.recommendation.Exception.ResourcenotFoundException;
-import com.movie.recommendation.model.Genre;
-import com.movie.recommendation.model.Movie;
-import com.movie.recommendation.model.Rating;
-import com.movie.recommendation.model.User;
-import com.movie.recommendation.repo.GenreRepository;
-import com.movie.recommendation.repo.MovieRepository;
-import com.movie.recommendation.repo.RatingRepo;
-import com.movie.recommendation.repo.UserRepository;
+import com.movie.recommendation.model.*;
+import com.movie.recommendation.repo.*;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -25,6 +19,12 @@ public class QueryClass {
     private MovieRepository movieRepository;
     @Autowired
     private RatingRepo ratingRepo;
+    @Autowired
+    private RoleRepository roleRepository;
+
+    public Role getRoleById(Long id){
+        return  this.roleRepository.findById(id).orElseThrow(()->new ResourcenotFoundException("role","roleId ",id));
+    }
 
     public Genre getgenreById(Long id){
         return  this.genreRepository.findById(id).orElseThrow(()->new ResourcenotFoundException("genre","genreId ",id));

@@ -9,20 +9,18 @@ import java.io.Serializable;
 
 import java.util.List;
 import java.util.Set;
-
+@Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
 @Table(name="role_table")
 public class Role implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="role_id")
     private long roleId;
     @Column(name="role_name")
-
     private String roleName;
 
     @OneToMany(cascade = CascadeType.ALL,fetch =FetchType.LAZY,mappedBy = "role")

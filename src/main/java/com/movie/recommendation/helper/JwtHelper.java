@@ -1,15 +1,15 @@
 package com.movie.recommendation.helper;
 
 
+import com.movie.recommendation.security.CustomUserDetail;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 @Service
@@ -37,10 +37,21 @@ public class JwtHelper {
         return extractExpiration(token).before(new Date());
     }
 
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(CustomUserDetail userDetails) {
         Map<String, Object> claims = new HashMap<>();
+    setCustomClaims(claims,userDetails);
         return createToken(claims, userDetails.getUsername());
     }
+    private void setCustomClaims(Map<String, Object> claims, CustomUserDetail principal) {
+        List<String> authorities = new ArrayList<>();
+        for(GrantedAuthority auth : principal.getAuthorities()) {
+            authorities.add(auth.getAuthority());
+        }
+        claims.put("authorities",authorities);
+
+    }
+
+
 
     private String createToken(Map<String, Object> claims, String subject) {
 

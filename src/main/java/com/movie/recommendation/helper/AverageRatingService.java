@@ -3,7 +3,9 @@ package com.movie.recommendation.helper;
 import com.movie.recommendation.model.Movie;
 import com.movie.recommendation.repo.RatingRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class AverageRatingService {
     @Autowired
     private  RatingRepo ratingRepo;
