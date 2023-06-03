@@ -3,8 +3,9 @@ package com.movie.recommendation.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.server.ResponseStatusException;
-
+@Controller
 public class ErrorController implements org.springframework.boot.web.servlet.error.ErrorController {
     public String getErrorPath(){
         return "/error";
