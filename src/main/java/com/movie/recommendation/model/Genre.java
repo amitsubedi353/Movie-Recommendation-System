@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -23,7 +24,7 @@ public class Genre implements Serializable {
     private String genreDescription;
 
     @Column(name="genre_created")
-    private String genreCreated;
+    private Date genreCreated;
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "genre")
     @JsonManagedReference(value = "genre_table")

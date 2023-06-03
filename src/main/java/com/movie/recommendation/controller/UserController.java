@@ -31,14 +31,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
-import java.util.ArrayList;
-
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 
 @RestController
-@CrossOrigin(origins = "http://localhost:80")
+@CrossOrigin(origins = "http://127.0.0.1:5500/")
 @RequestMapping("/user")
 public class UserController {
     @Autowired
@@ -91,17 +88,20 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse> login(@RequestBody JwtRequest jwtRequest) throws Exception {
+    public ResponseEntity<Map<String,String>> login(@RequestBody JwtRequest jwtRequest) throws Exception {
+        Map<String,String> message=new HashMap<>();
         String userName = jwtRequest.getUsername();
         String password =jwtRequest.getPassword();
         UserDetails userDetails = customUserDetailService.loadUserByUsername(userName);
         authenticate(userName, password, userDetails.getAuthorities());
         User retrievedUser=userRepository.findByUserEmail(userName);
         String jwtToken = this.jwtHelper.generateToken(new CustomUserDetail(retrievedUser));
+        String jwt="Bearer "+jwtToken;
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + jwtToken);
-        ApiResponse apiResponse = new ApiResponse("Token generated successfully");
-        return ResponseEntity.ok().headers(headers).body(apiResponse);
+        message.put("status:","200");
+        message.put("Jwt-Token: ",jwt);
+        return ResponseEntity.ok().body(message);
 
     }
 

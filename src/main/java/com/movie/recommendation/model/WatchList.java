@@ -1,5 +1,6 @@
 package com.movie.recommendation.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
@@ -17,7 +18,7 @@ public class WatchList {
     private User user;
     @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinColumn(name = "movie_id_fk",referencedColumnName = "movie_id")
-    @JsonManagedReference(value ="movie_table")
+    @JsonBackReference(value ="movie_table")
     private Movie movie;
 
 

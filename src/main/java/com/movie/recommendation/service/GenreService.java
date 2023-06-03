@@ -19,6 +19,8 @@ public interface GenreService {
 
     GenreDto getGenreByName(String name) throws Exception;
 
+    List<GenreDto> getAllGenre();
+
 
 
 }

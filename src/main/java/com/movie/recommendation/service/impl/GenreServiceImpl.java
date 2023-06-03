@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -34,6 +35,7 @@ public class GenreServiceImpl implements GenreService {
         Genre genre=new Genre();
         genre.setGenreName(genreDto.getGenreName());
         genre.setGenreDescription(genreDto.getGenreDescription());
+        genre.setGenreCreated(new Date());
         genre.setUser(retrievedUser);
         genre=genreRepository.save(genre);
         genreDto.setGenreId(genre.getGenreId());
@@ -92,5 +94,22 @@ public class GenreServiceImpl implements GenreService {
             return null;
         }
         return modelMapper.map(genre,GenreDto.class);
+    }
+
+    @Override
+    public List<GenreDto> getAllGenre() {
+        List<GenreDto> genreDtos=new ArrayList<>();
+        List<Genre> genreList=genreRepository.findAll();
+        if(genreList.isEmpty()){
+            return null;
+        }
+        for (Genre eachGenre:genreList
+             ) {
+            GenreDto genreDto=new GenreDto();
+            genreDto.setGenreName(eachGenre.getGenreName());
+            genreDto.setGenreDescription(eachGenre.getGenreDescription());
+            genreDtos.add(genreDto);
+        }
+        return genreDtos;
     }
 }

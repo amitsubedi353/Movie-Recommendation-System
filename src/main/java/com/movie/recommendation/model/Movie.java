@@ -43,7 +43,7 @@ public class Movie implements Serializable {
     @JsonBackReference(value = "user_table")
     private User user;
 
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "movie")
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER,mappedBy = "movie")
     @JsonManagedReference(value = "movie_table")
     private List<Rating> ratings;
 
