@@ -38,6 +38,7 @@ import java.util.List;
 
 
 @RestController
+@CrossOrigin(origins = "http://localhost:80")
 @RequestMapping("/user")
 public class UserController {
     @Autowired
