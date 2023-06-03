@@ -26,7 +26,7 @@ public class Role implements Serializable {
     @OneToMany(cascade = CascadeType.ALL,fetch =FetchType.LAZY,mappedBy = "role")
     @JsonManagedReference(value = "role_table")
     private List<User> users;
-    @OneToMany(cascade = CascadeType.ALL,fetch =FetchType.LAZY,mappedBy = "role")
+    @OneToMany(cascade = CascadeType.ALL,fetch =FetchType.EAGER,mappedBy = "role")
     @JsonManagedReference(value = "role_table")
     private List<Authority> authorities;
 
