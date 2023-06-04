@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/movie")
@@ -26,8 +27,11 @@ public class MovieController {
     @PreAuthorize("hasAuthority('manage_movie')")
     ResponseEntity<?> createMovieController(@RequestParam("file")MultipartFile file,@RequestParam("movieDto")String movieDto,Principal principal) throws Exception {
         MovieDto movieDto1=getMovie(movieDto);
-        String message=movieService.createMovie(file,movieDto1,principal);
-        return new ResponseEntity<>(message,HttpStatusCode.valueOf(200));
+        Map<String,String> message=movieService.createMovie(file,movieDto1,principal);
+        if(message.containsKey(500)){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(message);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(message);
 
     }
 

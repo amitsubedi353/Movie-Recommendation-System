@@ -29,6 +29,7 @@ public class Movie implements Serializable {
     private String movieDescription;
     @Column(name = "movie_image")
     private String image;
+    @Column(name = "movie_full_path")
     private String fullPath;
     @Column(name="release_date")
     @JsonFormat(pattern = "yyyy-MM-dd")

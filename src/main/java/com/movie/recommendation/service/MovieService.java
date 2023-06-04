@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface MovieService {
-    String createMovie(MultipartFile file, MovieDto movie,Principal principal) throws Exception;
+    Map<String,String> createMovie(MultipartFile file, MovieDto movie,Principal principal) throws Exception;
 
     String deleteMovie(Long movieId, Principal principal);
 

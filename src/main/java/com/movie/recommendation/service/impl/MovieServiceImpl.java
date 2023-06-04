@@ -49,10 +49,10 @@ public class MovieServiceImpl implements MovieService {
 
     @Transactional(rollbackOn = IOException.class)
     @Override
-    public String createMovie(MultipartFile multipartFile, MovieDto movieDto,Principal principal) throws IOException {
-
+    public Map<String,String> createMovie(MultipartFile multipartFile, MovieDto movieDto,Principal principal) throws IOException {
         User retrievedUser=userRepository.findByUserEmail(principal.getName());
        Map<String,String> message=new HashMap<>();
+       Map<String,String> resultMessage=new HashMap<>();
        Genre genre=queryClass.getgenreById(movieDto.getGenreId());
        List<Genre> genres=retrievedUser.getGenreList();
        if(genres.contains(genre)){
@@ -69,9 +69,13 @@ public class MovieServiceImpl implements MovieService {
            movie.setUser(retrievedUser);
            movie.setGenre(genre);
            movieRepository.save(movie);
+           resultMessage.put("200","movie created successfully");
+           resultMessage.put("imagePath:",movie.getFullPath());
+       }else {
+           resultMessage.put("500","Invalid genre id!!!");
+           return resultMessage;
        }
-
-        return "movie created successfully!!!";
+       return resultMessage;
 
     }
 

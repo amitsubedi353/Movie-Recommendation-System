@@ -99,8 +99,8 @@ public class UserController {
         String jwt="Bearer "+jwtToken;
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + jwtToken);
-        message.put("status:","200");
-        message.put("Jwt-Token: ",jwt);
+        message.put("status","200");
+        message.put("JwtToken ",jwt);
         return ResponseEntity.ok().body(message);
 
     }
