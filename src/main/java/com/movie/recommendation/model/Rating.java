@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,8 +23,7 @@ public class Rating implements Serializable {
     @Column(name = "rating_number")
     private float ratingNumber;
     @Column(name = "rating_post_date")
-    @JsonFormat(pattern = "yyyy/mm/dd")
-    private Date ratingPostDate;
+    private LocalDateTime ratingPostDate;
     @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id_fk",referencedColumnName = "user_id")
     @JsonBackReference(value = "user_table")

@@ -1,6 +1,5 @@
 package com.movie.recommendation.service;
 
-import com.movie.recommendation.model.Genre;
 import com.movie.recommendation.model.Role;
 import com.movie.recommendation.model.User;
 import com.movie.recommendation.model.userRole;

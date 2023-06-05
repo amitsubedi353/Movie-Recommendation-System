@@ -2,14 +2,11 @@ package com.movie.recommendation.service.impl;
 
 import com.movie.recommendation.Exception.ResourcenotFoundException;
 import com.movie.recommendation.helper.QueryClass;
-import com.movie.recommendation.model.Genre;
 import com.movie.recommendation.model.Role;
 import com.movie.recommendation.model.User;
 import com.movie.recommendation.model.userRole;
-import com.movie.recommendation.repo.GenreRepository;
 import com.movie.recommendation.repo.RoleRepository;
 import com.movie.recommendation.repo.UserRepository;
-import com.movie.recommendation.service.GenreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

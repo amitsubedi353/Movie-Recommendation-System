@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -32,18 +33,17 @@ public class RatingServiceImpl implements RatingService {
     @Override
     public Map<Integer,String> createRating(RatingDto ratingDto, Principal principal) {
         Map<Integer, String> message = new HashMap<>();
-
         User loggedInUser = userRepository.findByUserEmail(principal.getName());
         Movie retrievedMovie = queryClass.getMovieById(ratingDto.getMovieId());
         if (loggedInUser.getUserId().equals(ratingDto.getUserId())) {
-            Rating retrievedRating = ratingRepo.getRatingByUserAndMovie(loggedInUser.getUserId(), retrievedMovie.getMovieId());
+            Rating retrievedRating = ratingRepo.getRatingByUserAndMovie(loggedInUser.getUserId(),retrievedMovie.getMovieId());
             if (retrievedRating == null) {
-                if (ratingDto.getRatingNumber() <= AppConstant.maxRating) {
-                    Rating rating = new Rating();
+                if (ratingDto.getRatingNumber()>=AppConstant.minRating&&ratingDto.getRatingNumber() <= AppConstant.maxRating) {
+                    Rating rating = getRating(ratingDto);
                     rating.setMovie(retrievedMovie);
                     rating.setUser(loggedInUser);
-                    rating.setRatingNumber(ratingDto.getRatingNumber());
-                    rating = ratingRepo.save(rating);
+                    rating.setRatingPostDate(LocalDateTime.now());
+                    ratingRepo.save(rating);
                     message.put(200, "Rating created successfully!!!");
                     return message;
                 } else {
@@ -54,15 +54,20 @@ public class RatingServiceImpl implements RatingService {
                 message.put(500, "user has already created the rating for the given movie");
                 return message;
             }
+        }else {
+            message.put(500,"Invalid user token!!!!");
         }
             return message;
 
     }
 
-    @Override
-    public List<Rating> getRatingByMovie(Long movieId) {
-        return null;
+    private Rating getRating(RatingDto ratingDto){
+        Rating rating=new Rating();
+        rating.setRatingNumber(ratingDto.getRatingNumber());
+        return rating;
     }
+
+
 
 
 }

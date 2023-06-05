@@ -10,9 +10,4 @@ import java.util.Map;
 
 public interface RatingService {
     Map<Integer,String> createRating(RatingDto ratingDto, Principal principal) throws Exception;
-    List<Rating> getRatingByMovie(Long movieId);
-
-
-
-
 }

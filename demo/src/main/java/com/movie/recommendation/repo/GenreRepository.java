@@ -1,6 +1,5 @@
 package com.movie.recommendation.repo;
 
-import com.movie.recommendation.model.Genre;
 import com.movie.recommendation.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

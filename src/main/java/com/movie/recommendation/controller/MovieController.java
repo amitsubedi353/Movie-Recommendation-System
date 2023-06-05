@@ -47,10 +47,10 @@ public class MovieController {
     }
 
 
-@GetMapping("read/{genreId}")
+@GetMapping("/readByGenre")
 @PreAuthorize("hasAuthority('view_movie')")
-    ResponseEntity<?> readMovieByGenreController(@PathVariable("genreId")Long genreId){
-        List<MovieDto> movies=this.movieService.getAllMovieByGenre(genreId);
+    ResponseEntity<?> readMovieByGenreController(@RequestParam("genre")String genre){
+        List<MovieDto> movies=this.movieService.getAllMovieByGenre(genre);
         if(movies.isEmpty()){
             return new ResponseEntity<>(new ApiResponse("No movie for the given genre"),HttpStatusCode.valueOf(200));
         }
@@ -68,7 +68,7 @@ public class MovieController {
         return new ResponseEntity<>(movies,HttpStatusCode.valueOf(200));
 
     }
-    @GetMapping("/read-movie/{movieId}")
+    @GetMapping("/read/{movieId}")
     @PreAuthorize("hasAuthority('view_movie')")
     ResponseEntity<MovieDto> readMovieController(@PathVariable Long movieId){
         MovieDto movieDto=this.movieService.getMovieById(movieId);

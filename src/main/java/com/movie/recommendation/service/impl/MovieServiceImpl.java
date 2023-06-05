@@ -5,7 +5,6 @@ import com.movie.recommendation.dto.MovieDto;
 import com.movie.recommendation.helper.AverageRatingService;
 import com.movie.recommendation.helper.QueryClass;
 import com.movie.recommendation.model.*;
-import com.movie.recommendation.repo.GenreRepository;
 import com.movie.recommendation.repo.MovieRepository;
 import com.movie.recommendation.repo.RoleRepository;
 import com.movie.recommendation.repo.UserRepository;
@@ -19,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.security.Principal;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -29,8 +29,6 @@ public class MovieServiceImpl implements MovieService {
     private String imagePath;
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private GenreRepository genreRepository;
 
     @Autowired
     private MovieRepository movieRepository;
@@ -53,10 +51,11 @@ public class MovieServiceImpl implements MovieService {
         User retrievedUser=userRepository.findByUserEmail(principal.getName());
        Map<String,String> message=new HashMap<>();
        Map<String,String> resultMessage=new HashMap<>();
-       Genre genre=queryClass.getgenreById(movieDto.getGenreId());
-       List<Genre> genres=retrievedUser.getGenreList();
-       if(genres.contains(genre)){
            Movie movie=getMovie(movieDto);
+           if(movie==null){
+                resultMessage.put("500","provide a valid genre type!!!");
+                return resultMessage;
+           }
            try{
                message=imageService.uploadImage(multipartFile,imagePath);
            }catch (IOException ioException){
@@ -67,16 +66,10 @@ public class MovieServiceImpl implements MovieService {
                movie.setFullPath(entry.getValue());
            }
            movie.setUser(retrievedUser);
-           movie.setGenre(genre);
            movieRepository.save(movie);
-           resultMessage.put("200","movie created successfully");
+           resultMessage.put("200:","movie created successfully");
            resultMessage.put("imagePath:",movie.getFullPath());
-       }else {
-           resultMessage.put("500","Invalid genre id!!!");
-           return resultMessage;
-       }
        return resultMessage;
-
     }
 
     @Override
@@ -86,7 +79,7 @@ public class MovieServiceImpl implements MovieService {
         User loggedInUser=userRepository.findByUserEmail(principal.getName());
         if(loggedInUser.getUserId().equals(retrievedMovie.getUser().getUserId())){
             retrievedMovie.setUser(null);
-            retrievedMovie.setGenre(null);
+            //retrievedMovie.setGenre(null);
             movieRepository.delete(retrievedMovie);
             message="movie deleted successfully!!!";
         }else{
@@ -98,37 +91,76 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public List<MovieDto> getAllMovieByGenre(Long genreId) {
-
-        Genre retrievedGenre=queryClass.getgenreById(genreId);
-
-        List<Movie> movies=movieRepository.findByGenre(retrievedGenre);
-
+    public List<MovieDto> getAllMovieByGenre(String genre) {
+        List<MovieDto> movieDtos=new ArrayList<>();
+        List<Movie> movies=movieRepository.findByMovieGenre(genre);
         if(movies.isEmpty()){
             return null;
         }
-        return movies.stream().map(movie -> getMovieDto(movie)).collect(Collectors.toList());
+        for (Movie eachMovie:movies
+             ) {
+            movieDtos.add(getMovieDto(eachMovie));
+
+        }
+        return movieDtos;
     }
 
     @Override
     public List<MovieDto> getAllMovie() {
+        return getMovieDto(movieRepository.findAll());
+    }
 
-        List<Movie> movies=movieRepository.findAll();
+
+    public List<MovieDto> getMovieDto(List<Movie> movies) {
+        List<MovieDto>movieDtos=new ArrayList<>();
         if(movies.isEmpty()){
             return null;
         }
-        return movies.stream().map(movie -> getMovieDto(movie)).collect(Collectors.toList());
+        for (Movie eachMovie:movies
+             ) {
+            MovieDto movieDto=new MovieDto();
+            if(eachMovie.getRatings().size()==1){
+                movieDto.setMovieDescription(eachMovie.getMovieDescription());
+                movieDto.setMovieTitle(eachMovie.getMovieTitle());
+                movieDto.setReleaseDate(eachMovie.getReleaseDate());
+                movieDto.setGenreType(eachMovie.getMovieGenre());
+                movieDto.setImageFullPath(eachMovie.getFullPath());
+                movieDto.setAvgRating(calculateAverageRatingForSingleMovie(eachMovie));
+                movieDtos.add(movieDto);
+                continue;
+            }else if(eachMovie.getRatings().size()==0){
+                movieDto.setMovieTitle(eachMovie.getMovieTitle());
+                movieDto.setMovieDescription(eachMovie.getMovieDescription());
+                movieDto.setReleaseDate(eachMovie.getReleaseDate());
+                movieDto.setImageFullPath(eachMovie.getFullPath());
+                movieDto.setGenreType(eachMovie.getMovieGenre());
+                movieDtos.add(movieDto);
+                continue;
+            }else {
+                movieDto = getMovieDto(eachMovie);
+                movieDtos.add(movieDto);
+            }
+
+        }
+        return movieDtos;
     }
+
+
 
     @Override
     public MovieDto getMovieById(Long id) {
         Movie movie=queryClass.getMovieById(id);
-        return getMovieDto(movie);
+        List<MovieDto> movieDtos=getMovieDto(List.of(movie));
+        for (MovieDto eachMovieDto:movieDtos
+             ) {
+            return eachMovieDto;
+        }
+        return null;
     }
 
     @Override
     public String updateMovie(MovieDto movieDto,Principal principal) throws Exception {
-        String message="";
+       /* String message="";
         Movie retrievedMovie=queryClass.getMovieById(movieDto.getMovieId());
         User retrievedUser=userRepository.findByUserEmail(principal.getName());
         if(retrievedUser.getUserId().equals(retrievedMovie.getUser().getUserId())){
@@ -151,8 +183,8 @@ public class MovieServiceImpl implements MovieService {
             message="movie updated succcessfully!!!";
         }else{
             return null;
-        }
-        return message;
+        }*/
+        return null;
     }
 
 
@@ -160,6 +192,11 @@ public class MovieServiceImpl implements MovieService {
         Movie movie=new Movie();
         movie.setMovieTitle(movieDto.getMovieTitle());
         movie.setMovieDescription(movieDto.getMovieDescription());
+        String genre=getGenreType(movieDto.getGenreType());
+        if(genre.contains("valid")){
+            return null;
+        }
+        movie.setMovieGenre(genre);
         int value=movieDto.getReleaseDate().compareTo(new Date());
         if(value<0){
             throw new RuntimeException("Invalid movie date!!!");
@@ -173,10 +210,47 @@ public class MovieServiceImpl implements MovieService {
         MovieDto movieDto=new MovieDto();
         movieDto.setMovieTitle(movie.getMovieTitle());
         movieDto.setMovieDescription(movie.getMovieDescription());
-        movieDto.setGenreId(movie.getGenre().getGenreId());
         movieDto.setAvgRating(ratingService.calculateAverageRating(movie.getMovieId()));
         movieDto.setReleaseDate(movie.getReleaseDate());
+        movieDto.setImageFullPath(movie.getFullPath());
+        movieDto.setGenreType(movie.getMovieGenre());
         return movieDto;
+    }
+
+    private String getGenreType(String genreType){
+        String result="";
+        switch (genreType){
+            case "Romance":
+                result=GenreType.Romance.toString();
+                break;
+            case "Thriller":
+                result=GenreType.Thriller.toString();
+                break;
+            case "Horror":
+                result=GenreType.Horror.toString();
+                break;
+            case "Adventure":
+                result=GenreType.Adventure.toString();
+                break;
+            case "Comedy":
+                result=GenreType.Comedy.toString();
+                break;
+            default:
+                result="please provide a valid genre";
+                break;
+
+        }
+        return result;
+    }
+
+    private float calculateAverageRatingForSingleMovie(Movie movie){
+        float rating=0;
+         List<Rating> ratings=movie.getRatings();
+        for (Rating eachRating:ratings
+             ) {
+            rating=eachRating.getRatingNumber();
+        }
+        return rating;
     }
 
 }

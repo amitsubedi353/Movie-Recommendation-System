@@ -31,13 +31,11 @@ public class Movie implements Serializable {
     private String image;
     @Column(name = "movie_full_path")
     private String fullPath;
+    @Column(name="movie_genre")
+    private String movieGenre;
     @Column(name="release_date")
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date releaseDate;
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-    @JoinColumn(name="genre_id_fk",referencedColumnName = "genre_id")
-    @JsonBackReference(value = "genre_table")
-    private Genre genre;
 
     @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id_fk",referencedColumnName ="user_id")

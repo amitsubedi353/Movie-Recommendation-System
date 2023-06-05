@@ -13,7 +13,7 @@ public interface MovieService {
 
     String deleteMovie(Long movieId, Principal principal);
 
-    List<MovieDto> getAllMovieByGenre(Long genreId);
+    List<MovieDto> getAllMovieByGenre(String genre);
 
     List<MovieDto> getAllMovie();
 

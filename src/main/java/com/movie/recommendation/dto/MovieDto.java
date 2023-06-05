@@ -1,6 +1,4 @@
 package com.movie.recommendation.dto;
-import com.movie.recommendation.model.Genre;
-import com.movie.recommendation.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,7 +14,8 @@ public class MovieDto {
     private String movieDescription;
     private Date releaseDate;
     private float avgRating;
-    private Long genreId;
+    private String genreType;
     private Long userId;
+    private String imageFullPath;
 
 }

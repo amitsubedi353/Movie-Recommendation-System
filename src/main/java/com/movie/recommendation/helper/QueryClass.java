@@ -11,8 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class QueryClass {
 
-    @Autowired
-    private GenreRepository genreRepository;
+
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -26,9 +25,6 @@ public class QueryClass {
         return  this.roleRepository.findById(id).orElseThrow(()->new ResourcenotFoundException("role","roleId ",id));
     }
 
-    public Genre getgenreById(Long id){
-        return  this.genreRepository.findById(id).orElseThrow(()->new ResourcenotFoundException("genre","genreId ",id));
-    }
 
     public User getUserById(Long id){
         return this.userRepository.findById(id).orElseThrow(()->new ResourcenotFoundException("user","userId ",id));

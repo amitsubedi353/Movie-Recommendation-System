@@ -1,11 +1,9 @@
 package com.movie.recommendation.helper;
 
 import com.movie.recommendation.Exception.ResourcenotFoundException;
-import com.movie.recommendation.model.Genre;
 import com.movie.recommendation.model.Movie;
 import com.movie.recommendation.model.Rating;
 import com.movie.recommendation.model.User;
-import com.movie.recommendation.repo.GenreRepository;
 import com.movie.recommendation.repo.MovieRepository;
 import com.movie.recommendation.repo.RatingRepo;
 import com.movie.recommendation.repo.UserRepository;

@@ -2,10 +2,8 @@ package com.movie.recommendation.controller;
 
 
 import com.movie.recommendation.helper.ApiResponse;
-import com.movie.recommendation.model.Genre;
 import com.movie.recommendation.model.Role;
 import com.movie.recommendation.model.userRole;
-import com.movie.recommendation.service.GenreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;

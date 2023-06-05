@@ -35,9 +35,7 @@ public class User implements Serializable {
 private Role role;
 
 
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "user")
-    @JsonManagedReference(value = "user_table")
-    private List<Genre> genreList;
+
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "user")
     @JsonManagedReference(value = "user_table")

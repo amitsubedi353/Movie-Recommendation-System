@@ -3,7 +3,6 @@ package com.movie.recommendation.service.impl;
 
 import com.movie.recommendation.helper.QueryClass;
 import com.movie.recommendation.model.*;
-import com.movie.recommendation.repo.GenreRepository;
 import com.movie.recommendation.repo.MovieRepository;
 import com.movie.recommendation.repo.RoleRepository;
 import com.movie.recommendation.repo.UserRepository;

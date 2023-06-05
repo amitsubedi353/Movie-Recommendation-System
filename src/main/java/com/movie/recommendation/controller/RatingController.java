@@ -29,13 +29,5 @@ public class RatingController {
         }
         return ResponseEntity.status(HttpStatus.OK).body(rating1);
     }
-@GetMapping("/read/{movieId}")
-@PreAuthorize("hasAuthority('view_rating')")
- ResponseEntity<?> getAverageRatingByMovie(@PathVariable Long movieId){
-        List<Rating> ratings=ratingService.getRatingByMovie(movieId);
-        if(ratings.isEmpty()){
-            return new ResponseEntity<>(new ApiResponse("there is no rating for the given movie!!!"),HttpStatusCode.valueOf(200));
-        }
-        return new ResponseEntity<>(ratings,HttpStatusCode.valueOf(200));
-    }
+
 }
