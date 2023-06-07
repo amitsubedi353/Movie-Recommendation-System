@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +26,8 @@ public class WatchlistServiceImpl implements WatchlistService {
     private QueryClass queryClass;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private MovieServiceImpl movieService;
 
 
     @Override
@@ -62,10 +65,23 @@ public class WatchlistServiceImpl implements WatchlistService {
     }
 
     @Override
-    public List<MovieDto> viewAllMovieInWatchListByUser(Principal principal) {
+    public Map<Integer,List<MovieDto>> viewAllMovieInWatchListByUser(Principal principal) {
+        Map<Integer,List<MovieDto>> message=new HashMap<>();
+        List<MovieDto> movieDtos=new ArrayList<>();
         User loggedInUser=userRepository.findByUserEmail(principal.getName());
+        List<WatchList> watchLists=watchlistRepo.findWatchListForUser(loggedInUser.getUserId());
+        if(watchLists.isEmpty()){
+            message.put(200,null);
+            return message;
+        }
+        for (WatchList eachWatchList:watchLists
+             ) {
+            Movie movie=eachWatchList.getMovie();
+            MovieDto movieDto=movieService.getMovieDto(movie);
+            movieDtos.add(movieDto);
+        }
+        message.put(200,movieDtos);
 
-
-        return null;
+        return message;
     }
 }

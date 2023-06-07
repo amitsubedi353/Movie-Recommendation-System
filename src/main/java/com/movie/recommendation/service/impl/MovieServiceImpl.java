@@ -97,12 +97,8 @@ public class MovieServiceImpl implements MovieService {
         if(movies.isEmpty()){
             return null;
         }
-        for (Movie eachMovie:movies
-             ) {
-            movieDtos.add(getMovieDto(eachMovie));
+        return getMovieDto(movies);
 
-        }
-        return movieDtos;
     }
 
     @Override
@@ -206,7 +202,7 @@ public class MovieServiceImpl implements MovieService {
         return movie;
     }
 
-    private MovieDto getMovieDto(Movie movie){
+    public MovieDto getMovieDto(Movie movie){
         MovieDto movieDto=new MovieDto();
         movieDto.setMovieTitle(movie.getMovieTitle());
         movieDto.setMovieDescription(movie.getMovieDescription());

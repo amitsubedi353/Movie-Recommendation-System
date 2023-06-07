@@ -14,6 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -50,29 +51,35 @@ public class MovieController {
 @GetMapping("/readByGenre")
 @PreAuthorize("hasAuthority('view_movie')")
     ResponseEntity<?> readMovieByGenreController(@RequestParam("genre")String genre){
+        Map<String,List<MovieDto>> message=new HashMap<>();
         List<MovieDto> movies=this.movieService.getAllMovieByGenre(genre);
         if(movies.isEmpty()){
             return new ResponseEntity<>(new ApiResponse("No movie for the given genre"),HttpStatusCode.valueOf(200));
         }
-        return new ResponseEntity<>(movies,HttpStatusCode.valueOf(200));
+        message.put("data",movies);
+        return new ResponseEntity<>(message,HttpStatusCode.valueOf(200));
 
     }
 
     @GetMapping("/read-all-movie")
     @PreAuthorize("hasAuthority('view_movie')")
     ResponseEntity<?> readMovieByUserController(){
+        Map<String,List<MovieDto>> messsage=new HashMap<>();
         List<MovieDto> movies=this.movieService.getAllMovie();
         if(movies.isEmpty()){
             return new ResponseEntity<>(new ApiResponse("Something went wrong!!!"),HttpStatusCode.valueOf(500));
         }
-        return new ResponseEntity<>(movies,HttpStatusCode.valueOf(200));
+        messsage.put("data",movies);
+        return new ResponseEntity<>(messsage,HttpStatusCode.valueOf(200));
 
     }
     @GetMapping("/read/{movieId}")
     @PreAuthorize("hasAuthority('view_movie')")
-    ResponseEntity<MovieDto> readMovieController(@PathVariable Long movieId){
+    ResponseEntity<?> readMovieController(@PathVariable Long movieId){
+        Map<String,MovieDto> message=new HashMap<>();
         MovieDto movieDto=this.movieService.getMovieById(movieId);
-        return ResponseEntity.status(HttpStatus.OK).body(movieDto);
+        message.put("data",movieDto);
+        return ResponseEntity.status(HttpStatus.OK).body(message);
 
     }
     @PutMapping("/update")

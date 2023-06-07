@@ -9,6 +9,6 @@ import java.util.Map;
 public interface WatchlistService {
     Map<Integer,String> addMovieToWatchList(Long movieId, Principal principal);
     Map<Integer,String> removeMovieFromWatchList(Long movieId,Principal principal);
-    List<MovieDto>  viewAllMovieInWatchListByUser(Principal principal);
+    Map<Integer,List<MovieDto>>  viewAllMovieInWatchListByUser(Principal principal);
 
 }
