@@ -2,12 +2,11 @@ package com.movie.recommendation.service.impl;
 
 
 import com.movie.recommendation.dto.MovieDto;
+import com.movie.recommendation.filtering.CollaborativeFiltering;
 import com.movie.recommendation.helper.AverageRatingService;
 import com.movie.recommendation.helper.QueryClass;
 import com.movie.recommendation.model.*;
-import com.movie.recommendation.repo.MovieRepository;
-import com.movie.recommendation.repo.RoleRepository;
-import com.movie.recommendation.repo.UserRepository;
+import com.movie.recommendation.repo.*;
 import com.movie.recommendation.service.ImageService;
 import com.movie.recommendation.service.MovieService;
 import jakarta.transaction.Transactional;
@@ -43,6 +42,10 @@ public class MovieServiceImpl implements MovieService {
     private ImageService imageService;
     @Autowired
     private AverageRatingService ratingService;
+    @Autowired
+    private UserRatingMovieRepo userRatingMovieRepo;
+    @Autowired
+    private RatingRepo ratingRepo;
 
 
     @Transactional(rollbackOn = IOException.class)
@@ -152,6 +155,34 @@ public class MovieServiceImpl implements MovieService {
             return eachMovieDto;
         }
         return null;
+    }
+
+    @Override
+    public Map<Integer,List<MovieDto>> recommendMovieForUser(Principal principal, int numRecommendation) {
+        Map<Integer,List<MovieDto>> message=new HashMap<>();
+        List<MovieDto> movieDtos=new ArrayList<>();
+        User loggedInUser=userRepository.findByUserEmail(principal.getName());
+        if(movieRepository.findAll().size()<numRecommendation){
+            message.put(500,null);
+            return message;
+
+        }
+        CollaborativeFiltering collaborativeFiltering=new CollaborativeFiltering(userRepository,movieRepository,ratingRepo);
+        List<Long> movieId=collaborativeFiltering.recommendMovies(loggedInUser.getUserId(),numRecommendation);
+        if(movieId.isEmpty()){
+            message.put(200,null);
+            return message;
+        }
+        List<Movie> movies=new ArrayList<>();
+        for (Long eachMovieId:movieId
+             ) {
+            Movie retrievedMovie=movieRepository.findById(eachMovieId).get();
+            movies.add(retrievedMovie);
+        }
+        movieDtos.addAll(getMovieDto(movies));
+        message.put(200,movieDtos);
+
+        return message;
     }
 
     @Override

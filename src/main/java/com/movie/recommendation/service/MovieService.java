@@ -19,6 +19,7 @@ public interface MovieService {
 
     MovieDto getMovieById(Long id);
 
+    Map<Integer,List<MovieDto>> recommendMovieForUser(Principal principal,int numRecommendation);
     String  updateMovie(MovieDto movieDto,Principal principal) throws Exception;
 
 

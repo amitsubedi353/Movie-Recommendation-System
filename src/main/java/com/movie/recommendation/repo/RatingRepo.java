@@ -18,6 +18,8 @@ public interface RatingRepo extends JpaRepository<Rating,Long> {
     @Query(value = "select r.rating_id,r.rating_number,r.rating_post_date,r.movie_id_fk,r.user_id_fk from rating_table r inner join user_table u on u.user_id=r.user_id_fk inner join movie_table m on m.movie_id=r.movie_id_fk where r.user_id_fk=?1 and r.movie_id_fk=?2",nativeQuery = true)
     Rating getRatingByUserAndMovie(Long userId,Long movieId);
 
+    List<Rating> findByUser(User user);
+
 
 
 }

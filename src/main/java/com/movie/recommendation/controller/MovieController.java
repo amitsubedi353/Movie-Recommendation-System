@@ -82,6 +82,24 @@ public class MovieController {
         return ResponseEntity.status(HttpStatus.OK).body(message);
 
     }
+
+    @GetMapping("/read/recommend")
+    @PreAuthorize("hasAuthority('view_movie')")
+    ResponseEntity<?> readRecommendatedMovieController(@RequestParam("numRecommendation")int numRecommendation,Principal principal){
+        Map<Integer,List<MovieDto>> movies=movieService.recommendMovieForUser(principal, numRecommendation);
+        Map<String,List<MovieDto>> message=new HashMap<>();
+        for (Map.Entry<Integer,List<MovieDto>> entry:movies.entrySet()
+             ) {
+            message.put("data",entry.getValue());
+
+        }
+        if(movies.containsKey(500)){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Recommendation number invalid!!!");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(message);
+
+    }
+
     @PutMapping("/update")
     @PreAuthorize("hasAuthority('manage_movie')")
     ResponseEntity<?> updateMovieController(@RequestBody MovieDto movieDto,Principal principal) throws Exception {
