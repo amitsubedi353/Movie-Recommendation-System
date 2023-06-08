@@ -1,15 +1,11 @@
 package com.movie.recommendation.filtering;
 
 import com.movie.recommendation.model.Rating;
-import com.movie.recommendation.model.User;
-import com.movie.recommendation.model.UserRatingMovie;
 import com.movie.recommendation.repo.MovieRepository;
 import com.movie.recommendation.repo.RatingRepo;
-import com.movie.recommendation.repo.UserRatingMovieRepo;
 import com.movie.recommendation.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.security.Principal;
 import java.util.*;
 
 

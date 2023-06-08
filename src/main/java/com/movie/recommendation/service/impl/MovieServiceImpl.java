@@ -43,8 +43,6 @@ public class MovieServiceImpl implements MovieService {
     @Autowired
     private AverageRatingService ratingService;
     @Autowired
-    private UserRatingMovieRepo userRatingMovieRepo;
-    @Autowired
     private RatingRepo ratingRepo;
 
 
