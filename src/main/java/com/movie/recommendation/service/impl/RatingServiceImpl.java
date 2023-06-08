@@ -35,7 +35,6 @@ public class RatingServiceImpl implements RatingService {
         Map<Integer, String> message = new HashMap<>();
         User loggedInUser = userRepository.findByUserEmail(principal.getName());
         Movie retrievedMovie = queryClass.getMovieById(ratingDto.getMovieId());
-        if (loggedInUser.getUserId().equals(ratingDto.getUserId())) {
             Rating retrievedRating = ratingRepo.getRatingByUserAndMovie(loggedInUser.getUserId(),retrievedMovie.getMovieId());
             if (retrievedRating == null) {
                 if (ratingDto.getRatingNumber()>=AppConstant.minRating&&ratingDto.getRatingNumber() <= AppConstant.maxRating) {
@@ -54,10 +53,7 @@ public class RatingServiceImpl implements RatingService {
                 message.put(500, "user has already created the rating for the given movie");
                 return message;
             }
-        }else {
-            message.put(500,"Invalid user token!!!!");
-        }
-            return message;
+
 
     }
 

@@ -119,20 +119,26 @@ public class MovieServiceImpl implements MovieService {
              ) {
             MovieDto movieDto=new MovieDto();
             if(eachMovie.getRatings().size()==1){
+                movieDto.setMovieId(eachMovie.getMovieId());
                 movieDto.setMovieDescription(eachMovie.getMovieDescription());
                 movieDto.setMovieTitle(eachMovie.getMovieTitle());
                 movieDto.setReleaseDate(eachMovie.getReleaseDate());
                 movieDto.setGenreType(eachMovie.getMovieGenre());
                 movieDto.setImageFullPath(eachMovie.getFullPath());
+                movieDto.setUserId(eachMovie.getUser().getUserId());
                 movieDto.setAvgRating(calculateAverageRatingForSingleMovie(eachMovie));
+
                 movieDtos.add(movieDto);
                 continue;
             }else if(eachMovie.getRatings().size()==0){
+                movieDto.setMovieId(eachMovie.getMovieId());
                 movieDto.setMovieTitle(eachMovie.getMovieTitle());
                 movieDto.setMovieDescription(eachMovie.getMovieDescription());
                 movieDto.setReleaseDate(eachMovie.getReleaseDate());
                 movieDto.setImageFullPath(eachMovie.getFullPath());
                 movieDto.setGenreType(eachMovie.getMovieGenre());
+                movieDto.setUserId(eachMovie.getUser().getUserId());
+
                 movieDtos.add(movieDto);
                 continue;
             }else {
@@ -231,12 +237,14 @@ public class MovieServiceImpl implements MovieService {
 
     public MovieDto getMovieDto(Movie movie){
         MovieDto movieDto=new MovieDto();
+        movieDto.setMovieId(movie.getMovieId());
         movieDto.setMovieTitle(movie.getMovieTitle());
         movieDto.setMovieDescription(movie.getMovieDescription());
         movieDto.setAvgRating(ratingService.calculateAverageRating(movie.getMovieId()));
         movieDto.setReleaseDate(movie.getReleaseDate());
         movieDto.setImageFullPath(movie.getFullPath());
         movieDto.setGenreType(movie.getMovieGenre());
+        movieDto.setUserId(movie.getUser().getUserId());
         return movieDto;
     }
 
