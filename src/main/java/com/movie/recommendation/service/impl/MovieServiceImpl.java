@@ -224,12 +224,8 @@ public class MovieServiceImpl implements MovieService {
             return null;
         }
         movie.setMovieGenre(genre);
-        int value=movieDto.getReleaseDate().compareTo(new Date());
-        if(value<0){
-            throw new RuntimeException("Invalid movie date!!!");
-        }else {
-            movie.setReleaseDate(movieDto.getReleaseDate());
-        }
+        movie.setReleaseDate(movieDto.getReleaseDate());
+
         return movie;
     }
 
@@ -262,6 +258,20 @@ public class MovieServiceImpl implements MovieService {
             case "Comedy":
                 result=GenreType.Comedy.toString();
                 break;
+            case "Documentries":
+                result=GenreType.Documentries.toString();
+                break;
+            case "Crime":
+                result=GenreType.Crime.toString();
+                break;
+            case "Action":
+                result=GenreType.Action.toString();
+                break;
+            case "Award_Winning":
+                result=GenreType.Award_Winning.toString();
+                break;
+
+
             default:
                 result="please provide a valid genre";
                 break;
