@@ -1,11 +1,13 @@
 package com.movie.recommendation.service.impl;
 
+import com.movie.recommendation.helper.QueryClass;
+import com.movie.recommendation.model.Movie;
 import com.movie.recommendation.service.ImageService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -14,6 +16,9 @@ import java.util.UUID;
 
 @Service
 public class ImageUploadServiceImpl implements ImageService {
+
+    @Autowired
+    private QueryClass  queryClass;
     @Override
     public Map<String, String> uploadImage(MultipartFile multipartFile, String path) throws IOException {
         Map<String,String> message=new HashMap<>();
@@ -28,5 +33,13 @@ public class ImageUploadServiceImpl implements ImageService {
         Files.copy(multipartFile.getInputStream(), Paths.get(fullPath));
         message.put(fileName,fullPath);
         return message;
+    }
+
+    @Override
+    public InputStream serveImage(Long movieId) throws FileNotFoundException {
+        Movie retrievedMovie=queryClass.getMovieById(movieId);
+        String fullPath=retrievedMovie.getFullPath();
+        InputStream inputStream=new FileInputStream(fullPath);
+        return inputStream;
     }
 }

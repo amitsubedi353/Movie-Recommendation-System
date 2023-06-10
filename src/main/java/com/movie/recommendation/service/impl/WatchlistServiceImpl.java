@@ -54,7 +54,7 @@ public class WatchlistServiceImpl implements WatchlistService {
         User loggedInUser=userRepository.findByUserEmail(principal.getName());
         WatchList watchList=watchlistRepo.findWatchlistByUserAndMovie(loggedInUser.getUserId(),movieId);
         if(watchList==null){
-            message.put(500,"LoggedInuser does not save the given movie to the watchlist");
+            message.put(500,"Logged In user does not save the given movie to the watchlist");
             return message;
         }
         watchList.setUser(null);
