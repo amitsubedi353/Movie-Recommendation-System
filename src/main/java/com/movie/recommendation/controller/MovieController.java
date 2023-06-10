@@ -5,6 +5,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.movie.recommendation.dto.MovieDto;
 import com.movie.recommendation.helper.ApiResponse;
+import com.movie.recommendation.model.Movie;
+import com.movie.recommendation.repo.MovieRepository;
 import com.movie.recommendation.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,12 +25,14 @@ import java.util.Map;
 public class MovieController {
     @Autowired
     private MovieService movieService;
+    @Autowired
+    private MovieRepository movieRepository;
 
     @PostMapping("/create")
     @PreAuthorize("hasAuthority('manage_movie')")
     ResponseEntity<?> createMovieController(@RequestParam("file")MultipartFile file,@RequestParam("movieDto")String movieDto,Principal principal) throws Exception {
         MovieDto movieDto1=getMovie(movieDto);
-        Map<String,String> message=movieService.createMovie(file,movieDto1,principal);
+        Map<String,Object> message=movieService.createMovie(file,movieDto1,principal);
         if(message.containsKey(500)){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(message);
         }
@@ -113,6 +117,22 @@ public class MovieController {
     private MovieDto getMovie(String movieDto) throws JsonProcessingException {
         ObjectMapper objectMapper=new ObjectMapper();
         return objectMapper.readValue(movieDto,MovieDto.class);
+    }
+
+    @GetMapping("/search")
+    @PreAuthorize("hasAuthority('search_movie')")
+    public ResponseEntity<Map<String,Object>> searchMovieByTitle(@RequestParam("title") String title){
+        List< Movie> movies =movieRepository.searchMovieByTitle(title);
+        Map<String,Object>map=new HashMap<>();
+        if(movies==null)
+        {
+            map.put("status",200);
+            map.put("data",null);
+            return ResponseEntity.status(HttpStatus.OK).body(map);
+        }
+        map.put("status",200);
+        map.put("data",movies);
+        return ResponseEntity.status(HttpStatus.OK).body(map);
     }
 
 }

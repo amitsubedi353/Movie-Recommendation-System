@@ -93,7 +93,7 @@ public class CollaborativeFiltering {
                     return Collections.emptyList();
                 }
 
-                //Calculate similariity between the target user and other users
+                //Calculate similarity between the target user and other users
                 Map<Long, Double> similarityMap = new HashMap<>();
                 for (Map.Entry<Long, Map<Long, Float>> entry : userRatings.entrySet()) {
                     Long userId = entry.getKey();

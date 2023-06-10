@@ -48,13 +48,14 @@ public class MovieServiceImpl implements MovieService {
 
     @Transactional(rollbackOn = IOException.class)
     @Override
-    public Map<String,String> createMovie(MultipartFile multipartFile, MovieDto movieDto,Principal principal) throws IOException {
+    public Map<String,Object> createMovie(MultipartFile multipartFile, MovieDto movieDto,Principal principal) throws IOException {
         User retrievedUser=userRepository.findByUserEmail(principal.getName());
        Map<String,String> message=new HashMap<>();
-       Map<String,String> resultMessage=new HashMap<>();
+       Map<String,Object> resultMessage=new HashMap<>();
            Movie movie=getMovie(movieDto);
            if(movie==null){
-                resultMessage.put("500","provide a valid genre type!!!");
+               resultMessage.put("status",500);
+                resultMessage.put("data","provide a valid genre type!!!");
                 return resultMessage;
            }
            try{
@@ -68,8 +69,9 @@ public class MovieServiceImpl implements MovieService {
            }
            movie.setUser(retrievedUser);
            movieRepository.save(movie);
-           resultMessage.put("200:","movie created successfully");
-           resultMessage.put("imagePath:",movie.getFullPath());
+           resultMessage.put("status",200);
+           resultMessage.put("data","movie created successfully");
+           resultMessage.put("imagePath",movie.getFullPath());
        return resultMessage;
     }
 
@@ -80,8 +82,7 @@ public class MovieServiceImpl implements MovieService {
         User loggedInUser=userRepository.findByUserEmail(principal.getName());
         if(loggedInUser.getUserId().equals(retrievedMovie.getUser().getUserId())){
             retrievedMovie.setUser(null);
-            //retrievedMovie.setGenre(null);
-            movieRepository.delete(retrievedMovie);
+            movieRepository.deleteById(retrievedMovie.getMovieId());
             message="movie deleted successfully!!!";
         }else{
             return null;
@@ -272,6 +273,9 @@ public class MovieServiceImpl implements MovieService {
                 break;
             case "Action":
                 result=GenreType.Action.toString();
+                break;
+            case "Mystrey":
+                result=GenreType.Mystrey.toString();
                 break;
             case "Award_Winning":
                 result=GenreType.Award_Winning.toString();
