@@ -22,8 +22,8 @@ public class RatingController {
     private RatingService ratingService;
     @PostMapping("/create")
     @PreAuthorize("hasAuthority('create_rating')")
-    ResponseEntity<Map<Integer,String>> createRatingController(@RequestBody RatingDto ratingDto, Principal principal) throws Exception {
-        Map<Integer,String> rating1=ratingService.createRating(ratingDto,principal);
+    ResponseEntity<Map<String, Object>> createRatingController(@RequestBody RatingDto ratingDto, Principal principal) throws Exception {
+        Map<String, Object> rating1=ratingService.createRating(ratingDto,principal);
         if(rating1.containsKey(500)){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(rating1);
         }

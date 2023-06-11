@@ -31,8 +31,8 @@ public class RatingServiceImpl implements RatingService {
     private MovieRepository movieRepository;
 
     @Override
-    public Map<Integer,String> createRating(RatingDto ratingDto, Principal principal) {
-        Map<Integer, String> message = new HashMap<>();
+    public Map<String,Object> createRating(RatingDto ratingDto, Principal principal) {
+        Map<String, Object> message = new HashMap<>();
         User loggedInUser = userRepository.findByUserEmail(principal.getName());
         Movie retrievedMovie = queryClass.getMovieById(ratingDto.getMovieId());
             Rating retrievedRating = ratingRepo.getRatingByUserAndMovie(loggedInUser.getUserId(),retrievedMovie.getMovieId());
@@ -43,14 +43,14 @@ public class RatingServiceImpl implements RatingService {
                     rating.setUser(loggedInUser);
                     rating.setRatingPostDate(LocalDateTime.now());
                     ratingRepo.save(rating);
-                    message.put(200, "Rating created successfully!!!");
+                    message.put("status", "Rating created successfully!!!");
                     return message;
                 } else {
-                    message.put(500, "please select a appropriate rating number");
+                    message.put("status", "please select a appropriate rating number");
                     return message;
                 }
             } else {
-                message.put(500, "user has already created the rating for the given movie");
+                message.put("status", "user has already created the rating for the given movie");
                 return message;
             }
 

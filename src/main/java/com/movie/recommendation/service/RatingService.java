@@ -9,5 +9,5 @@ import java.util.List;
 import java.util.Map;
 
 public interface RatingService {
-    Map<Integer,String> createRating(RatingDto ratingDto, Principal principal) throws Exception;
+    Map<String,Object> createRating(RatingDto ratingDto, Principal principal) throws Exception;
 }
