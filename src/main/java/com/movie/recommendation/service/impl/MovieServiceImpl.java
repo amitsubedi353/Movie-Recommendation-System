@@ -152,14 +152,24 @@ public class MovieServiceImpl implements MovieService {
 
 
     @Override
-    public MovieDto getMovieById(Long id) {
+    public Map<String,Object> getMovieById(Long id,Principal principal) {
+        Map<String,Object> message=new HashMap<>();
+        User loggedInUser=userRepository.findByUserEmail(principal.getName());
+        Rating rating=ratingRepo.getRatingByUserAndMovie(loggedInUser.getUserId(),id);
+        if(rating!=null){
+            message.put("message","rated");
+
+        }
+        else {
+            message.put("message","unrated");
+        }
         Movie movie=queryClass.getMovieById(id);
         List<MovieDto> movieDtos=getMovieDto(List.of(movie));
         for (MovieDto eachMovieDto:movieDtos
              ) {
-            return eachMovieDto;
+            message.put("data",eachMovieDto);
         }
-        return null;
+        return message;
     }
 
     @Override

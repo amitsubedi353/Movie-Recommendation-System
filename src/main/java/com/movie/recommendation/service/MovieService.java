@@ -17,7 +17,7 @@ public interface MovieService {
 
     List<MovieDto> getAllMovie();
 
-    MovieDto getMovieById(Long id);
+    Map<String,Object> getMovieById(Long id,Principal principal);
 
     Map<Integer,List<MovieDto>> recommendMovieForUser(Principal principal,int numRecommendation);
     String  updateMovie(MovieDto movieDto,Principal principal) throws Exception;

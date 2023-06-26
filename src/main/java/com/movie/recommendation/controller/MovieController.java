@@ -79,10 +79,8 @@ public class MovieController {
     }
     @GetMapping("/read/{movieId}")
     @PreAuthorize("hasAuthority('view_movie')")
-    ResponseEntity<?> readMovieController(@PathVariable Long movieId){
-        Map<String,MovieDto> message=new HashMap<>();
-        MovieDto movieDto=this.movieService.getMovieById(movieId);
-        message.put("data",movieDto);
+    ResponseEntity<?> readMovieController(@PathVariable Long movieId,Principal principal){
+        Map<String,Object> message=this.movieService.getMovieById(movieId,principal);
         return ResponseEntity.status(HttpStatus.OK).body(message);
 
     }

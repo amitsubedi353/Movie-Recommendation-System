@@ -50,7 +50,8 @@ public class RatingServiceImpl implements RatingService {
                     return message;
                 }
             } else {
-                message.put("status", "user has already created the rating for the given movie");
+                message.put("status",500);
+                message.put("data","user has already created the rating for the given movie");
                 return message;
             }
 
