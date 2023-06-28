@@ -85,6 +85,7 @@ public class MovieController {
 
     }
 
+
     @GetMapping("/read/recommend")
     @PreAuthorize("hasAuthority('view_movie')")
     ResponseEntity<?> readRecommendatedMovieController(@RequestParam("numRecommendation")int numRecommendation,Principal principal){
